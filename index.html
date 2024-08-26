@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistemas de frases</title>
+    <!-- Carga de CSS de Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Carga de Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- Carga de CSS personalizado -->
+    <link href="estilos.css" rel="stylesheet">
+</head>
+<body>
+    <div id="app" class="container mt-5">
+        <h1>Lista de frases</h1>
+        <br>
+        <hr>
+        <p class="p">Frases totales: {{ contadorFrases }}</p>
+        <hr>
+        <br>
+        
+        <div class="form-group">
+            <input type="text" class="busqueda" placeholder="Buscar por autor" v-model="autorBusqueda">
+        </div>
+
+
+        <div class="form-group">
+            <input type="text" class="input-form" placeholder="Añadir frase" v-model="nuevaFrase">
+        </div>
+        
+        <div class="form-group">
+            <input type="text" class="input-form" placeholder="Añadir autor" v-model="nuevoAutor">
+        </div>
+        <p>
+            <button class="button-63" role="button" @click="agregarFrase">Agregar frase</button>
+        </p>
+        <hr>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Frase</th>
+                    <th>Autor</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(frase, index) in frasesFiltradas" :key="index">
+                    <td>{{ frase.frase }}</td>
+                    <td class="f-a">{{ frase.autor }}</td>
+                    <td>
+                        <button class="btn btn-success btn-sm" @click="abrirModalEditar(index)">
+                            <i class="fas fa-pencil-alt" aria-hidden="true"></i> Editar
+                        </button>
+                        <button class="btn btn-danger btn-sm" @click="eliminarFrase(index)">
+                            <i class="fas fa-trash-alt" aria-hidden="true"></i> Eliminar
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Modal para editar frases -->
+        <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditarLabel">Editar Frase</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="text" class="form-control" v-model="fraseEditada.frase" placeholder="Editar frase">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" v-model="fraseEditada.autor" placeholder="Editar autor">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" @click="guardarEdicion">Guardar Cambios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de confirmación de eliminación -->
+        <div class="modal fade" id="confirmarEliminarModal" tabindex="-1" role="dialog" aria-labelledby="confirmarEliminarModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmarEliminarModalLabel">Confirmar Eliminación</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Estás seguro de que deseas eliminar esta frase?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger" @click="confirmarEliminacion">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de alerta -->
+        <div class="modal fade" id="alertaModal" tabindex="-1" aria-labelledby="alertaModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="alertaModalLabel">Atención</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ mensajeAlerta }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carga de JS de jQuery, Popper, Bootstrap y Vue -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/vue@3.3.4/dist/vue.global.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
